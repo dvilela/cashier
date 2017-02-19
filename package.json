@@ -1,0 +1,38 @@
+{
+  "name": "cashier",
+  "version": "1.0.0-alpha",
+  "description": "It resumes your accounts balance at a given time.",
+  "main": "lib/cashier.js",
+  "scripts": {
+    "prestart": "node setup.js",
+    "start": "node lib/cashier.js",
+    "test": "jest"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/baruinho/cashier.git"
+  },
+  "keywords": [
+    "cashier",
+    "bank",
+    "account",
+    "balance",
+    "summary"
+  ],
+  "author": "Dênis Vilela <denisxvilela@gmail.com>",
+  "license": "GPL-3.0",
+  "bugs": {
+    "url": "https://github.com/baruinho/cashier/issues"
+  },
+  "homepage": "https://github.com/baruinho/cashier#readme",
+  "dependencies": {
+    "dotenv": "^4.0.0",
+    "express": "^4.14.1",
+    "express-hateoas-links": "^1.0.7",
+    "winston": "^2.3.1",
+    "yamljs": "^0.2.8"
+  },
+  "devDependencies": {
+    "jest": "^18.1.0"
+  }
+}
