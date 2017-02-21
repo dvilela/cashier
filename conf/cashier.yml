@@ -1,4 +1,6 @@
 api:
+  # Used on Hateoas links. Default is hostname
+  # host: www.myhost.com
   port: 8081
 
 mongodb:
