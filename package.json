@@ -8,6 +8,9 @@
     "start": "node lib/cashier.js",
     "test": "jest"
   },
+  "jest": {
+    "moduleDirectories": ["node_modules"]
+  },
   "repository": {
     "type": "git",
     "url": "https://github.com/baruinho/cashier.git"
