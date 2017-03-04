@@ -9,7 +9,9 @@
     "test": "jest"
   },
   "jest": {
-    "moduleDirectories": ["node_modules"]
+    "moduleDirectories": [
+      "node_modules"
+    ]
   },
   "repository": {
     "type": "git",
