@@ -1,6 +1,7 @@
 # Todo
+- [x] Review model references
+- [ ] Add HATEAOAS pagination
 - [ ] Resolve scheduling on crud service
-- [ ] Add moment-business for resolving the transaction scheduling
 - [ ] Review HTTP Status Codes
-- [ ] Review model references
 - [ ] Authentication
+- [ ] Add moment-business for resolving the transaction scheduling
