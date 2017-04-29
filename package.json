@@ -4,6 +4,7 @@
   "description": "It resumes your accounts balance at a given time.",
   "main": "api/cashier.js",
   "scripts": {
+    "start": "./bin/api.js",
     "prestart": "node setup.js",
     "start-api": "node api/cashier.js",
     "test": "jest"

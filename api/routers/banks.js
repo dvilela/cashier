@@ -4,25 +4,13 @@ const accountService = require('../services/accounts');
 const accounts = require('./accounts');
 
 const Linker = ({ url }) => (req, bank) => {
-  if (bank.accounts != null) {
-    bank.accounts = bank.accounts.map((accountId) => ({
-      id: accountId,
-      links: [{
-        rel: 'self',
-        hrel: url + req.baseUrl + '/' + bank._id + '/accounts/' + accountId,
-        method: 'GET'
-      }, {
-        rel: 'balance',
-        hrel: url + req.baseUrl + '/' + bank._id + '/accounts/' + accountId + '/balance',
-        method: 'GET'
-      }]
-    }));
-  }
-
   bank.links = [{
     rel: 'self',
     hrel: url + req.baseUrl + '/' + bank._id,
     method: 'GET'
+  }, {
+    rel: 'edit',
+    hrel: url + req.baseUrl + '/' + bank._id
   }, {
     rel: 'accounts',
     hrel: url + req.baseUrl + '/' + bank._id + '/accounts'
@@ -44,16 +32,17 @@ module.exports = ({ config }) => {
 
   const appendPagination = (req, res, entities, totalCount) => {
     res.append('X-Total-Count', totalCount);
-    return {
-      res
-    };
   };
 
   router.get('/', (req, res) =>
     bankService.find(req.query).then(
-      ({ totalCount, content: docs }) => {
-        if (docs && docs.length) {
-          appendPagination(req, res, docs, totalCount).res.json(linkers(req, docs));
+      ({ totalCount, content: banks }) => {
+        if (banks && banks.length) {
+          populateAccounts(req, banks)
+            .then((banks) => {
+              appendPagination(req, res, banks, totalCount);
+              res.json(linkers(req, banks));
+            });
         } else {
           res.sendStatus(204);
         }
@@ -67,7 +56,8 @@ module.exports = ({ config }) => {
         if (doc == null) {
           res.sendStatus(204);
         } else {
-          res.json(linker(req, doc));
+          populateAccounts(req, doc)
+            .then((bank) => res.json(linker(req, bank)));
         }
       }
     )
@@ -76,7 +66,8 @@ module.exports = ({ config }) => {
   router.post('/', (req, res) =>
     bankService.create(req.body).then(
       (doc) => {
-        res.status(201).json(linker(req, doc));
+        populateAccounts(req, doc)
+          .then((doc) => res.status(201).json(linker(req, doc)));
       },
       (err) => res.status(500).json(err)
     )
@@ -84,7 +75,8 @@ module.exports = ({ config }) => {
 
   router.put('/:id', (req, res) =>
     bankService.update(req.params.id, req.body).then(
-      (doc) => res.json(linker(req, doc)),
+      (doc) => populateAccounts(req, doc)
+                .then((doc) => res.json(linker(req, doc))),
       (err) => res.status(500).json(err)
     )
   );
@@ -98,30 +90,20 @@ module.exports = ({ config }) => {
 
   // accounts
 
-  router.get('/:bank_id/accounts', (req, res) =>
-    bankService.findById(req.params.bank_id, ["accounts"])
-      .then((bank) => {
-        if (bank == null) {
-          res.status(404).send("Bank not found.");
-        } else {
-          req.query.query = Object.assign(
-            {},
-            req.query.query,
-            { _id: bank.accounts.map(objId => objId.toString()) }
-          );
-          return accountService.find(req.query)
-            .then(
-              ({ totalCount, content: accounts }) => {
-                if (accounts && accounts.length) {
-                  appendPagination(req, res, accounts, totalCount).res.json(accountLinkers(req, accounts));
-                } else {
-                  res.sendStatus(204);
-                }
-              }
-            );
-        }
-      })
-  );
+  const populateBankWithAccount = (req, bank) =>
+    accountService
+      .find({ query: { _id: bank.accounts } })
+      .then(({ content: accounts }) => {
+        bank.accounts = accountLinkers(req, accounts);
+        return bank;
+      });
+
+  const populateAccounts = (req, banks) => {
+    if (banks instanceof Array) {
+      return Promise.all( banks.map((bank) => populateBankWithAccount(req, bank)) );
+    }
+    return populateBankWithAccount(req, banks);
+  };
 
   return router;
 };

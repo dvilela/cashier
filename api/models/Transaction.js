@@ -1,13 +1,16 @@
 const { createModel, Schema } = require('./helper');
 
 const schema = {
-  account_id: Schema.ObjectId,
   ammount: {
     currency: {
       type: String,
-      enum: ['BRL']
+      enum: ['BRL'],
+      default: 'BRL'
     },
-    total: Number
+    total: {
+      type: Number,
+      required: true
+    }
   },
   date: {
     type: Date,
@@ -16,7 +19,8 @@ const schema = {
   description: String,
   intent: {
     type: String,
-    enum: ['pay', 'receive']
+    enum: ['pay', 'receive'],
+    required: true
   },
   payer: {
     id: Schema.ObjectId,
