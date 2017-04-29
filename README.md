@@ -16,6 +16,7 @@ Cashier depends on mongodb. Its URI can be set on config file.
 All the environment variables can be set with a `.env` file. When cashier is started for the first time, this file will be created at the root of the app.
 
 Table: Available environment variables
+
 | Name | Default | Description |
 |:----:|:-------:|:-----------:|
 | NODE_ENV | production | Can be set to `development`, enabling alpha features and more detailed logs. |
