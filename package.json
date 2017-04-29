@@ -2,10 +2,10 @@
   "name": "cashier",
   "version": "1.0.0-alpha",
   "description": "It resumes your accounts balance at a given time.",
-  "main": "lib/cashier.js",
+  "main": "api/cashier.js",
   "scripts": {
     "prestart": "node setup.js",
-    "start": "node lib/cashier.js",
+    "start-api": "node api/cashier.js",
     "test": "jest"
   },
   "jest": {
