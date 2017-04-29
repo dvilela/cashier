@@ -3,7 +3,14 @@
 # Cashier
 It resumes your accounts balance at a given time.
 
+# Config
+
+The configuration file is `conf/cashier.yml`.
+
 # Running
+
+Cashier depends on mongodb. Its URI can be set on config file.
+
 ```
 npm install
 npm start

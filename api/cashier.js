@@ -6,7 +6,7 @@ const bodyParser = require('body-parser');
 const morgan = require('./helpers/morgan');
 const middleware = require('./middleware');
 const initializeDB = require('./db');
-const api = require('./api');
+const routers = require('./routers');
 
 Object.assign(config, require('./api-details')(config.api));
 
@@ -22,7 +22,7 @@ app.use(morgan);
 app.use(middleware({ config }));
 
 // api
-app.use('/api', api({ config }));
+app.use('/api', routers({ config }));
 
 app.listen(config.api.port, (err) => {
   if (err) {

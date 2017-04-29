@@ -1,5 +1,6 @@
 const { Router } = require('express');
 const banks = require('./banks');
+const accounts = require('./accounts');
 const transactions = require('./transactions');
 
 module.exports = ({ config }) => {
@@ -16,6 +17,7 @@ module.exports = ({ config }) => {
   const v1 = Router();
 
   v1.use('/banks', banks({ config }));
+  v1.use('/accounts', accounts({ config }));
   v1.use('/transactions', transactions({ config }));
 
   api.use('/v1', v1);
