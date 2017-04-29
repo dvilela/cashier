@@ -23,6 +23,8 @@ module.exports = ({ config }) => {
     v1.use('/accounts', accounts({ config }));
   }
 
+  v1.use('/transactions', transactions({ config }));
+
   api.use('/v1', v1);
 
   return api;
