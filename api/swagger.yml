@@ -1,0 +1,110 @@
+---
+# api/swagger.yml: API Definition
+
+# Metadata
+swagger: "2.0"
+
+info:
+  title: Cashier Rest API
+  description: Definitions of Restful API of Cashier.
+  version: 1.0.0
+
+# Base URL
+host: api.cashier.com
+basePath: /v1
+schemes:
+  - http
+
+# Consumes/Produces
+consumes:
+  - application/json
+produces:
+  - application/json
+
+# Paths
+paths:
+  /accounts:
+    get: Returns a list of accounts.
+    responses:
+      200:
+        description: A list of accounts
+        schema:
+          type: array
+          items:
+            $ref: '#/definitions/Account'
+
+# Definitions
+definitions:
+  # bank model
+  Bank:
+    required:
+      - name
+    properties:
+      accounts:
+        type: array
+        items:
+          $ref: '#/definitions/Account'
+      description:
+        type: string
+      name:
+        type: string
+
+  # account model
+  Account:
+    required:
+      - name
+    properties:
+      description:
+        type: string
+      name:
+        type: string
+      tansactions:
+        type: array
+        items:
+          $ref: '#/definitions/Transaction'
+  # transaction model
+  Transaction:
+    required:
+      - intent
+      - ammount
+    properties:
+      ammount:
+        type: object
+        required:
+          - currency
+          - total
+        properties:
+          currency:
+            type: string
+          total:
+            type: number
+            format: float
+      date:
+        type: string
+        format: date-time
+      description:
+        type: string
+      intent:
+        type: string
+      payer:
+        type: object
+        properties:
+          id:
+            type: string
+          name:
+            type: string
+      receiver:
+        type: object
+        properties:
+          id:
+            type: string
+          name:
+            type: string
+      scheduling:
+        type: object
+        properties:
+          counted:
+            type: boolean
+          date:
+            type: string
+            format: date-time
