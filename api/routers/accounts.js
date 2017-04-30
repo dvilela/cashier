@@ -1,25 +1,51 @@
 const { router } = require('./helper');
 const service = require('../services/accounts');
+const transactions = require('./transactions');
+const transactionService = require('../services/transactions');
 
-const Linker = ({ url }) => (req, account) => {
+const Linker = ({ url }) => (account) => {
   account.links = [{
     rel: 'self',
-    hrel: url + '/accounts/' + account._id,
+    hrel: url + '/api/v1/accounts/' + account._id,
     method: 'GET'
   }, {
     rel: 'edit',
-    hrel: url + '/accounts/' + account._id
+    hrel: url + '/api/v1/accounts/' + account._id
   }, {
     rel: 'transactions',
-    hrel: url + '/accounts/'  + account._id + '/transactions',
+    hrel: url + '/api/v1/accounts/'  + account._id + '/transactions',
     method: 'GET'
   }, {
     rel: 'balance',
-    hrel: url + '/accounts/'  + account._id + '/balance',
+    hrel: url + '/api/v1/accounts/'  + account._id + '/balance',
     method: 'GET'
   }];
   return account;
 };
 
-module.exports = ({ config }) => router({ config, service, linker: Linker(config) });
+// Transactions
+
+const Populator = (config) => {
+
+  const transactionLinker = transactions.Linker(config);
+  const transactionLinkers = (docs) => docs.map(doc => transactionLinker(doc));
+
+  const populateAccountWithTransactions = (account) =>
+    transactionService
+      .find({ query: { _id: account.transactions } })
+      .then(({ content: transactions }) => {
+        account.transactions = transactionLinkers(transactions);
+        return account;
+      });
+
+  return (accounts) => {
+    if (accounts instanceof Array) {
+      return Promise.all( accounts.map((account) => populateAccountWithTransactions(account)) );
+    }
+    return populateAccountWithTransactions(accounts);
+  };
+};
+
+module.exports = ({ config }) => router({ config, service, linker: Linker(config), populator: Populator(config) });
 module.exports.Linker = Linker;
+module.exports.Populator = Populator;

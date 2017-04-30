@@ -1,16 +1,17 @@
 const { router } = require('./helper');
 const service = require('../services/transactions');
 
-const Linker = ({ config }) => ({ req, transaction }) => {
+const Linker = ({ url }) => (transaction) => {
   transaction.links = [{
     rel: 'self',
-    hrel: url + req.baseUrl + '/transactions/' + transactionId,
+    hrel: url + '/api/v1/transactions/' + transaction._id,
     method: 'GET'
   }, {
     rel: 'edit',
-    hrel: url + req.baseUrl + '/transactions/' + transactionId
+    hrel: url + '/api/v1/transactions/' + transaction._id
   }];
   return transaction;
 };
 
-module.exports = ({ config }) => router({ config, service, linker: Linker });
+module.exports = ({ config }) => router({ config, service, linker: Linker(config) });
+module.exports.Linker = Linker;

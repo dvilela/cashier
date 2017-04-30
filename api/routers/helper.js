@@ -1,74 +1,93 @@
 const { Router } = require('express');
+const logger = require('../helpers/logger');
 
-const getDefaultLinker = ({ url }) => (req, doc) => Object.assign(
-    {},
-    doc,
-    {
-      links: [{
-        rel: 'self',
-        hrel: url + req.baseUrl + '/' + doc._id,
-        method: 'GET'
-      }]
-    }
-  );
+const getDefaultLinker = () => (doc) => doc;
 
-const router = ({ config, service, linker = getDefaultLinker(config) }) => {
+const router = ({ config, service, linker = getDefaultLinker(), populator = (req, docs) => Promise.resolve(docs) }) => {
   const router = Router();
 
-  const linkers = (req, docs) => docs.map(doc => linker(req, doc));
+  const linkers = (docs) => docs.map(doc => linker(doc));
 
   const appendPagination = (req, res, entities, totalCount) => {
     res.append('X-Total-Count', totalCount);
-    return {
-      res
-    };
+  };
+
+  const handleError = (err, res) => {
+    logger.error(err);
+    res.status(500).json({
+      errors: [{
+        userMessage: "Oops! Something went very wrong! Please, try again later.",
+        internalMessage: err.message
+      }]
+    });
   };
 
   router.get('/', (req, res) =>
-    service.find(req.query).then(
-      ({ totalCount, content: docs }) => {
-        if (docs && docs.length) {
-          appendPagination(req, res, docs, totalCount).res.json(linkers(req, docs));
-        } else {
-          res.sendStatus(204);
+    service.find(req.query)
+      .then(
+        ({ totalCount, content: docs }) => {
+          if (docs && docs.length) {
+            populator(docs)
+              .then((docs) => {
+                appendPagination(req, res, docs, totalCount);
+                res.json(linkers(docs));
+              })
+              .catch((err) => handleError(err, res))
+          } else {
+            res.sendStatus(204);
+          }
         }
-      }
-    )
+      )
+      .catch((err) => handleError(err, res))
   );
 
   router.get('/:id', (req, res) =>
-    service.findById(req.params.id, req.query).then(
-      (doc) => {
-        if (doc == null) {
-          res.sendStatus(204);
-        } else {
-          res.json(linker(req, doc));
+    service.findById(req.params.id, req.query)
+      .then(
+        (doc) => {
+          if (doc == null) {
+            res.sendStatus(204);
+          } else {
+            populator(doc)
+              .then((doc) => {
+                res.json(linker(doc))
+              })
+              .catch((err) => handleError(err, res));
+          }
         }
-      }
-    )
+      )
+      .catch((err) => handleError(err, res))
   );
 
   router.post('/', (req, res) =>
-    service.create(req.body).then(
-      (doc) => {
-        res.status(201).json(linker(req, doc));
-      },
-      (err) => res.status(500).json(err)
-    )
+    service.create(req.body)
+      .then(
+        (doc) => populator(doc)
+                  .then((doc) => res.status(201).json(linker(doc)))
+                  .catch((err) => handleError(err, res)),
+        (err) => res.status(500).json(err)
+      )
+      .catch((err) => handleError(err, res))
   );
 
   router.put('/:id', (req, res) =>
-    service.update(req.params.id, req.body).then(
-      (doc) => res.json(linker(req, doc)),
-      (err) => res.status(500).json(err)
-    )
+    service.update(req.params.id, req.body)
+      .then(
+        (doc) => populator(doc)
+                  .then((doc) => res.json(linker(doc)))
+                  .catch((err) => handleError(err, res)),
+        (err) => res.status(500).json(err)
+      )
+      .catch((err) => handleError(err, res))
   );
 
   router.delete('/:id', (req, res) =>
-    service.deleteById(req.params.id).then(
-      () => res.sendStatus(204),
-      (err) => res.status(500).json(err)
-    )
+    service.deleteById(req.params.id)
+      .then(
+        () => res.sendStatus(204),
+        (err) => res.status(500).json(err)
+      )
+      .catch((err) => handleError(err, res))
   );
 
   return router;
