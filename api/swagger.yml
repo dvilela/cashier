@@ -121,6 +121,34 @@ paths:
           description: Account deleted
         500:
           description: Oh no! Unexpected error occurred. Please, report the error.
+  /accounts/{id}/balance:
+    get:
+      tags:
+        - account
+      summary: Returns the account balance
+      parameters:
+        - name: id
+          in: path
+          description: The account id
+          type: string
+          required: true
+      responses:
+        200:
+          description: The account balance object. Each key is representing a time moment, like a Month or Day, and its value is that moment balance.
+          schema:
+            type: object
+            additionalProperties:
+              type: number
+              format: float
+            example:
+              2017-04: 789.1
+              2017-05: 1234.5
+        404:
+          description: Account not found
+        409:
+          description: The request was valid but cashier was not in the appropriate state to process it. Retrying the same request later may be successful
+        500:
+          description: Oh no! Unexpected error occurred. Please, report the error
   /accounts/{accountId}/transactions:
     get:
       tags:

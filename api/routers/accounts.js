@@ -115,6 +115,34 @@ module.exports = ({ config }) => {
       .catch((err) => handleError(err, res))
   );
 
+  router.get('/:id/balance', (req, res) =>
+    service
+      .findById(req.params.id)
+      .then(
+        (account) => {
+          if (account == null) {
+            res.status(404).send('Account not found');
+          } else {
+            req.query.query = Object.assign({}, req.query.query, { _id: account.transactions });
+            return transactionService
+              .find(req.query)
+              .then(({ content: transactions }) => {
+                if (transactions != null && transactions.length) {
+                  if (req.query.interval != null) {
+                    res.send(transactionService.balance(transactions, { interval: req.query.interval }));
+                  } else {
+                    res.send(transactionService.balance(transactions));
+                  }
+                } else {
+                  res.sendStatus(204);
+                }
+              });
+          }
+        }
+      )
+      .catch((err) => handleError(err, res))
+  );
+
   router.post('/', (req, res) =>
     service
       .create(req.body)
