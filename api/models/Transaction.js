@@ -29,12 +29,6 @@ const schema = {
   receiver: {
     id: Schema.ObjectId,
     name: String
-  },
-  scheduling: {
-    counted: {
-      type: Boolean
-    },
-    date: Date
   }
 };
 

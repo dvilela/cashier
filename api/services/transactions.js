@@ -4,7 +4,7 @@ const groupby = require('../helpers/groupby');
 const sortObject = require('../helpers/sort-object');
 const moment = require('moment');
 
-// service middleware
+// service middleware (disabled for now)
 const resolveScheduling = (transaction) => {
   if (transaction.scheduling != null && transaction.scheduling.date != null) {
     const schedulingDate = moment(transaction.scheduling.date);
@@ -17,7 +17,8 @@ const resolveScheduling = (transaction) => {
 };
 
 // service
-const service = crud(Transaction, [resolveScheduling]);
+// const service = crud(Transaction, [resolveScheduling]);
+const service = crud(Transaction);
 
 const balance = (transactions, { interval = 'month' } = {}) => {
   const groups = groupByTime(transactions, { interval });
@@ -42,8 +43,9 @@ const groupByTime = (transactions, { interval = 'month '} = {}) => {
   return sortObject(groupby[interval](transactions, (transaction) => transaction.date));
 };
 
+// for testing pourposes
 service.balance = balance;
 service.groupByTime = groupByTime;
-service.resolveScheduling = resolveScheduling;
+// service.resolveScheduling = resolveScheduling;
 
 module.exports = service;

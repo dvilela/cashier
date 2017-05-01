@@ -2,7 +2,7 @@ const service = require('../transactions');
 const moment = require('moment');
 
 describe('transaction service', () => {
-  it('should resolve scheduling if scheduled', () => {
+  xit('should resolve scheduling if scheduled', () => {
     const date = moment().utc().subtract(2, 'months').format();
     const scheduling_date = moment().utc().add(2, 'months').format();
     const transaction = {

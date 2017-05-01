@@ -24,31 +24,194 @@ produces:
 # Paths
 paths:
   /accounts:
-    get: Returns a list of accounts.
-    responses:
-      200:
-        description: A list of accounts
-        schema:
-          type: array
-          items:
+    get:
+      tags:
+        - account
+      summary: Returns a list of accounts.
+      responses:
+        200:
+          description: A list of accounts
+          schema:
+            type: array
+            items:
+              $ref: '#/definitions/Account'
+        500:
+          description: Oh no! Unexpected error occurred. Please, report the error.
+    post:
+      tags:
+        - account
+      summary: Creates an account
+      parameters:
+        - name: account
+          in: body
+          description: Account to add to the system
+          required: true
+          schema:
             $ref: '#/definitions/Account'
+      responses:
+        201:
+          description: Account created
+        400:
+          description: Invalid input
+        500:
+          description: Oh no! Unexpected error occurred. Please, report the error.
+  /accounts/{id}:
+    get:
+      tags:
+        - account
+      summary: Gets the account
+      parameters:
+        - name: id
+          in: path
+          description: The account id
+          type: string
+          required: true
+      responses:
+        200:
+          description: Account updated
+          schema:
+            $ref: '#/definitions/Account'
+        404:
+          description: Account not found
+        409:
+          description: The request was valid but Cashier was not in the appropriate state to process it. Retrying the same request later may be successful
+        500:
+          description: Oh no! Unexpected error occurred. Please, report the error.
+    put:
+      tags:
+        - account
+      summary: Updates the account
+      parameters:
+        - name: id
+          in: path
+          description: The account id to be updated
+          type: string
+          required: true
+        - name: account
+          in: body
+          description: The new account informations
+          required: true
+          schema:
+            $ref: '#/definitions/Account'
+      responses:
+        204:
+          description: Account updated
+        400:
+          description: Invalid input
+        409:
+          description: The request was valid but Cashier was not in the appropriate state to process it. Retrying the same request later may be successful
+        500:
+          description: Oh no! Unexpected error occurred. Please, report the error.
+    delete:
+      tags:
+        - account
+      summary: Deletes the account
+      parameters:
+        - name: id
+          in: path
+          description: The account id to be deleted
+          type: string
+          required: true
+      responses:
+        204:
+          description: Account deleted
+        500:
+          description: Oh no! Unexpected error occurred. Please, report the error.
+  /accounts/{accountId}/transactions:
+    get:
+      tags:
+        - transactions
+      summary: Returns the account transactions
+      parameters:
+        - name: accountId
+          in: path
+          description: The related account
+          type: string
+          required: true
+      responses:
+        200:
+          description: A list of transactions
+          schema:
+            type: array
+            items:
+              $ref: '#/definitions/Transaction'
+        500:
+          description: Oh no! Unexpected error occurred. Please, report the error.
+    post:
+      tags:
+        - transactions
+      summary: Creates a transaction related to the account
+      parameters:
+        - name: accountId
+          in: path
+          description: The related account
+          type: string
+          required: true
+        - name: transaction
+          in: body
+          description: The transaction to be inserted in the account
+          required: true
+          schema:
+            $ref: '#/definitions/Transaction'
+      responses:
+        201:
+          description: Transaction created
+        400:
+          description: Invalid input
+        500:
+          description: Oh no! Unexpected error occurred. Please, report the error.
+  /accounts/{accountId}/transactions/{transactionId}:
+    put:
+      tags:
+        - transactions
+      summary: Updates the transaction related to the account
+      parameters:
+        - name: accountId
+          in: path
+          description: The id of the related account
+          type: string
+          required: true
+        - name: transactionId
+          in: path
+          description: The id of the transaction to be updated
+          type: string
+          required: true
+        - name: transaction
+          in: body
+          description: The new transaction informations
+          required: true
+          schema:
+            $ref: '#/definitions/Transaction'
+      responses:
+        204:
+          description: Transaction updated
+        400:
+          description: Invalid input
+        500:
+          description: Oh no! Unexpected error occurred. Please, report the error.
+    delete:
+      tags:
+        - transactions
+      summary: Deletes the transaction from the account
+      parameters:
+        - name: accountId
+          in: path
+          description: The id of the related account
+          type: string
+          required: true
+        - name: transactionId
+          in: path
+          description: The id of the transaction to be deleted
+          type: string
+          required: true
+      responses:
+        204:
+          description: Transaction deleted
+        500:
+          description: Oh no! Unexpected error occurred. Please, report the error.
 
 # Definitions
 definitions:
-  # bank model
-  Bank:
-    required:
-      - name
-    properties:
-      accounts:
-        type: array
-        items:
-          $ref: '#/definitions/Account'
-      description:
-        type: string
-      name:
-        type: string
-
   # account model
   Account:
     required:
@@ -62,6 +225,16 @@ definitions:
         type: array
         items:
           $ref: '#/definitions/Transaction'
+      created_at:
+        type: string
+        format: date-time
+      updated_at:
+        type: string
+        format: date-time
+      _id:
+        type: string
+      __v:
+        type: integer
   # transaction model
   Transaction:
     required:
@@ -100,11 +273,13 @@ definitions:
             type: string
           name:
             type: string
-      scheduling:
-        type: object
-        properties:
-          counted:
-            type: boolean
-          date:
-            type: string
-            format: date-time
+      created_at:
+        type: string
+        format: date-time
+      updated_at:
+        type: string
+        format: date-time
+      _id:
+        type: string
+      __v:
+        type: integer

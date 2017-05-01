@@ -1,7 +1,5 @@
 # Todo
-- [x] Review model references
 - [ ] Add HATEAOAS pagination
-- [ ] Resolve scheduling on crud service
 - [ ] Review HTTP Status Codes
+- [ ] Send Location header on resource creation responses
 - [ ] Authentication
-- [ ] Add moment-business for resolving the transaction scheduling

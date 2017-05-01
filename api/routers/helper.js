@@ -16,7 +16,7 @@ const router = ({ config, service, linker = getDefaultLinker(), populator = (req
     logger.error(err);
     res.status(500).json({
       errors: [{
-        userMessage: "Oops! Something went very wrong! Please, try again later.",
+        userMessage: "Oh no! Unexpected error occurred. You can try again later.",
         internalMessage: err.message
       }]
     });

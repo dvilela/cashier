@@ -40,25 +40,25 @@ const crud = (model, middlewares = []) => {
     )
   };
 
-  const findById = (id, { fields }) =>
+  const findById = (id, { fields } = {}) =>
     model.findById(id).select(fields).then(
       (response) => response && applyMiddlewares(response.toObject()),
       (err) => logger.error(err)
     );
 
-  const update = (id, doc) =>
-    model.findOneAndUpdate({ _id: id }, doc, { new: true }).then(
+  const pull = (id, path, value) =>
+    update(id, { $pull: { [path]: value } }, {});
+
+  const push = (id, path, value) =>
+    update(id, { $push: { [path]: value } }, {});
+
+  const update = (id, doc, options = { new: true }) =>
+    model.findOneAndUpdate({ _id: id }, doc, options).then(
       (doc) => {
         if (doc != null) {
           // saving incremented document version
           doc.increment();
           doc.save();
-
-          obj = doc.toObject();
-
-          // little hack to return incremented version.
-          obj.__v++;
-          return applyMiddlewares(obj);
         }
       },
       (err) => logger.error(err)
@@ -69,6 +69,8 @@ const crud = (model, middlewares = []) => {
     deleteById,
     find,
     findById,
+    pull,
+    push,
     update
   };
 };
