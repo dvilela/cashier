@@ -1,6 +1,7 @@
 api:
   host: api.cashier.com
   port: 8081
+  publicUrl: http://api.cashier.com/v1 # used at hrel of links
 
 mongodb:
   uri: mongodb://172.17.0.2/cashier

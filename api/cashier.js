@@ -29,7 +29,7 @@ app.listen(config.api.port, (err) => {
     logger.error('fatal', err);
     return process.exit(1);
   }
-  logger.info(`API is running at ${config.url}`);
+  logger.info(`API is running at ${config.apiPublicUrl}`);
 });
 
 initializeDB({ mongodb: config.mongodb })

@@ -1,39 +1,50 @@
 const { Router } = require('express');
 const service = require('../services/accounts');
-const transactions = require('./transactions');
 const transactionService = require('../services/transactions');
 const logger = require('../helpers/logger');
 
-const Linker = ({ url }) => (account) => {
+const Linker = ({ apiPublicUrl }) => (account) => {
   account.links = [{
     rel: 'self',
-    hrel: url + '/api/v1/accounts/' + account._id,
+    hrel: `${apiPublicUrl}/accounts/${account._id}`,
     method: 'GET'
   }, {
     rel: 'edit',
-    hrel: url + '/api/v1/accounts/' + account._id
+    hrel: `${apiPublicUrl}/accounts/${account._id}`
   }, {
     rel: 'transactions',
-    hrel: url + '/api/v1/accounts/' + account._id + '/transactions',
+    hrel: `${apiPublicUrl}/accounts/${account._id}` + '/transactions',
     method: 'GET'
   }, {
     rel: 'balance',
-    hrel: url + '/api/v1/accounts/' + account._id + '/balance',
+    hrel: `${apiPublicUrl}/accounts/${account._id}` + '/balance',
     method: 'GET'
   }];
   return account;
 };
 
+const TransactionLinker = ({ apiPublicUrl }) => (accountId, transaction) => {
+  transaction.links = [{
+    rel: 'self',
+    hrel: `${apiPublicUrl}/accounts/${accountId}/transactions/${transaction._id}`,
+    method: 'GET'
+  }, {
+    rel: 'edit',
+    hrel: `${apiPublicUrl}/accounts/${accountId}/transactions/${transaction._id}`
+  }];
+  return transaction;
+};
+
 const Populator = (config) => {
 
-  const transactionLinker = transactions.Linker(config);
-  const transactionLinkers = (docs) => docs.map(doc => transactionLinker(doc));
+  const transactionLinker = TransactionLinker(config);
+  const transactionLinkers = (accountId, docs) => docs.map(doc => transactionLinker(accountId, doc));
 
   const populateAccountWithTransactions = (account) =>
     transactionService
       .find({ query: { _id: account.transactions } })
       .then(({ content: transactions }) => {
-        account.transactions = transactionLinkers(transactions);
+        account.transactions = transactionLinkers(account._id, transactions);
         return account;
       });
 
@@ -133,19 +144,23 @@ module.exports = ({ config }) => {
 
   // transactions
 
+  const transactionLinker = TransactionLinker(config);
+  const transactionLinkers = (accountId, docs) => docs.map(doc => transactionLinker(accountId, doc));
+
   router.get('/:accountId/transactions', (req, res) => {
     service
       .findById(req.params.accountId)
       .then(
         (account) => {
           if (account == null) {
-            res.status(404).send('Resource not found: Account');
+            res.status(404).send('Account not found');
           } else {
+            req.query.query = Object.assign({}, req.query.query, { _id: account.transactions });
             return transactionService
-              .find({ query: { _id: account.transactions } })
+              .find(req.query)
               .then(({ content: transactions }) => {
                 if (transactions != null && transactions.length) {
-                  res.send(transactionLinkers(transactions));
+                  res.send(transactionLinkers(req.params.accountId, transactions));
                 } else {
                   res.sendStatus(204);
                 }
@@ -164,6 +179,15 @@ module.exports = ({ config }) => {
           service
             .push(req.params.accountId, 'transactions', transaction._id)
             .then(() => res.sendStatus(201))
+      )
+      .catch((err) => handleError(err, res))
+  });
+
+  router.get('/:accountId/transactions/:transactionId', (req, res) => {
+    transactionService
+      .findById(req.params.transactionId, req.query)
+      .then(
+        (transaction) => res.send(transaction)
       )
       .catch((err) => handleError(err, res))
   });

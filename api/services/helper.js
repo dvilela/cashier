@@ -42,7 +42,8 @@ const crud = (model, middlewares = []) => {
 
   const findById = (id, { fields } = {}) =>
     model.findById(id).select(fields).then(
-      (response) => response && applyMiddlewares(response.toObject()),
+      (response) =>
+        response && applyMiddlewares(response.toObject()),
       (err) => logger.error(err)
     );
 
