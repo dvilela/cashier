@@ -4,10 +4,11 @@
   "description": "It resumes your accounts balance at a given time.",
   "main": "api/cashier.js",
   "scripts": {
-    "start": "./bin/api.js",
-    "prestart": "node setup.js",
-    "start-api": "node api/cashier.js",
-    "test": "jest"
+    "start-api": "node setup.js && ./bin/api.js",
+    "start": "react-scripts start",
+    "build": "react-scripts build",
+    "test": "react-scripts test --env=jsdom",
+    "eject": "react-scripts eject"
   },
   "jest": {
     "moduleDirectories": [
@@ -20,7 +21,6 @@
   },
   "keywords": [
     "cashier",
-    "bank",
     "account",
     "balance",
     "summary"
@@ -39,11 +39,13 @@
     "moment": "^2.17.1",
     "mongoose": "^4.8.3",
     "morgan": "^1.8.1",
+    "react": "^15.5.4",
+    "react-dom": "^15.5.4",
     "rotating-file-stream": "^1.1.9",
     "winston": "^2.3.1",
     "yamljs": "^0.2.8"
   },
   "devDependencies": {
-    "jest": "^18.1.0"
+    "react-scripts": "0.9.5"
   }
 }
