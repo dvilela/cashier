@@ -19,26 +19,33 @@ class AccountBalance extends Component {
   render() {
     const { balance, account, isLoading } = this.props;
     const accountBalance = balance(account._id);
+    let content;
     if (isLoading(account._id)) {
-      return <p>Loading balance...</p>;
+      content = <p>Loading balance...</p>;
+    } else if (accountBalance == null) {
+      content = <p>No data</p>;
+    } else {
+      const balanceKeys = Object.keys(accountBalance);
+      content = (
+        <table>
+          <thead>
+            <tr>
+              { balanceKeys.map( (key) => <th key={`balance-key-${key}`}>{moment(key).format('MMMM')}</th> ) }
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              { balanceKeys.map( (key) => <td key={`balance-value-${key}`}>R$&nbsp;{accountBalance[key].toFixed(2)}</td> ) }
+            </tr>
+          </tbody>
+        </table>
+      );
     }
-    if (accountBalance == null) {
-      return <p>No data</p>;
-    }
-    const balanceKeys = Object.keys(accountBalance);
     return (
-      <table>
-        <thead>
-          <tr>
-            { balanceKeys.map( (key) => <th key={`balance-key-${key}`}>{moment(key).format('MMMM')}</th> ) }
-          </tr>
-        </thead>
-        <tbody>
-          <tr>
-            { balanceKeys.map( (key) => <td key={`balance-value-${key}`}>R$&nbsp;{accountBalance[key].toFixed(2)}</td> ) }
-          </tr>
-        </tbody>
-      </table>
+      <div>
+        <h2>Balance</h2>
+        {content}
+      </div>
     );
   }
 
