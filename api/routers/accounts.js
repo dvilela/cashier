@@ -42,7 +42,7 @@ const Populator = (config) => {
 
   const populateAccountWithTransactions = (account) =>
     transactionService
-      .find({ query: { _id: account.transactions } })
+      .find({ sort: { date: 1 }, query: { _id: account.transactions } })
       .then(({ content: transactions }) => {
         account.transactions = transactionLinkers(account._id, transactions);
         return account;
@@ -123,6 +123,8 @@ module.exports = ({ config }) => {
           if (account == null) {
             res.status(404).send('Account not found');
           } else {
+            req.query.offset = 0;
+            delete req.query.limit;
             req.query.query = Object.assign({}, req.query.query, { _id: account.transactions });
             return transactionService
               .find(req.query)

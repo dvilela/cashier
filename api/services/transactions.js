@@ -30,7 +30,8 @@ const balance = (transactions, { interval = 'month' } = {}) => {
           balance - transaction.ammount.total :
           balance + transaction.ammount.total
       ,
-      lastMonthBalance);
+      lastMonthBalance
+    );
     groups[group] = lastMonthBalance;
   }
   return groups;

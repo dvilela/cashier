@@ -6,6 +6,19 @@ import { getBalance, isLoading } from '../../redux/modules/balance/reducer';
 
 import moment from 'moment';
 
+import './AccountBalance.css';
+
+const BalancePoints = ({ children }) =>
+  <div className="balance-points">
+    {children}
+  </div>
+
+const BalancePoint = ({ time, value }) =>
+  <div className={`balance-point${value > 0 ? " receive" : value < 0 ? " pay" : ""}`}>
+    <p className="balance-point-title">{moment(time).format('MMMM')}</p>
+    <p className="balance-point-value">R$&nbsp;{value.toFixed(2)}</p>
+  </div>
+
 class AccountBalance extends Component {
   componentDidMount() {
     this.fetchBalance();
@@ -27,18 +40,13 @@ class AccountBalance extends Component {
     } else {
       const balanceKeys = Object.keys(accountBalance);
       content = (
-        <table>
-          <thead>
-            <tr>
-              { balanceKeys.map( (key) => <th key={`balance-key-${key}`}>{moment(key).format('MMMM')}</th> ) }
-            </tr>
-          </thead>
-          <tbody>
-            <tr>
-              { balanceKeys.map( (key) => <td key={`balance-value-${key}`}>R$&nbsp;{accountBalance[key].toFixed(2)}</td> ) }
-            </tr>
-          </tbody>
-        </table>
+        <BalancePoints>
+          { balanceKeys.map( (key) =>
+            <BalancePoint
+              key={`balance-key-${key}`}
+              time={key}
+              value={accountBalance[key]} /> ) }
+        </BalancePoints>
       );
     }
     return (

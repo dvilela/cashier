@@ -1,0 +1,23 @@
+.balance-points {
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+}
+.balance-point {
+    background-color: #f5f5f5;
+    border-radius: 5px;
+    padding: 5px;
+}
+.balance-point:not(:last-child) {
+    margin: 0 10px;
+}
+.balance-point.pay {
+    background-color: #f2dede
+}
+.balance-point.receive {
+    background-color: #d0e9c6
+}
+.balance-point-title {
+    text-align: center;
+    font-weight: bold
+}
