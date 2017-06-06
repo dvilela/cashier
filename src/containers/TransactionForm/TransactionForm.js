@@ -1,5 +1,5 @@
 import React from 'react';
-import { Field, reduxForm } from 'redux-form';
+import { Field, reduxForm, FormSection } from 'redux-form';
 import DateTimePicker from 'react-widgets/lib/DateTimePicker';
 import moment from 'moment';
 import momentLocaliser from 'react-widgets/lib/localizers/moment';
@@ -21,16 +21,28 @@ let TransactionForm = props => {
   return (
     <form onSubmit={handleSubmit}>
       <div>
-        <label htmlFor="intent">Intent</label>
-        <Field name="intent" component="input" type="text"/>
+        <label>Intent</label>
+        <div>
+          <Field name="intent" component="input" type="text" placeholder="Intent" />
+        </div>
       </div>
       <div>
-        <label htmlFor="date">Date</label>
-        <Field name="date" showTime={false} component={renderDateTimePicker} type="text"/>
+        <FormSection name="ammount">
+          <label>Currency</label>
+          <div>
+            <Field name="currency" component="input" type="text" value="BRL" />
+          </div>
+          <label>Ammount</label>
+          <div>
+            <Field name="total" component="input" type="number" value="BRL" />
+          </div>
+        </FormSection>
       </div>
       <div>
-        <label htmlFor="email">Email</label>
-        <Field name="email" component="input" type="email"/>
+        <label>Date</label>
+        <div>
+          <Field name="date" showTime={false} component={renderDateTimePicker} type="text" />
+        </div>
       </div>
       <div>
         <button type="submit" disabled={pristine || submitting}>Submit</button>

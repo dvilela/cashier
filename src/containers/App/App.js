@@ -7,7 +7,8 @@ import { LinkContainer } from 'react-router-bootstrap';
 import * as actions from '../../redux/modules/accounts/actions';
 import { getAccounts } from '../../redux/modules/accounts/reducer';
 
-import Account from '../../components/Account/Account';
+import Account from '../Account/Account';
+import Accounts from '../Accounts/Accounts';
 
 import './App.css';
 
@@ -60,7 +61,7 @@ class App extends Component {
 
         <div className="container">
           <Route path="/about" component={() => (<p>Hello, About!</p>)} />
-          <Route exact path="/accounts" component={() => (<p>Hello, Accounts!</p>)} />
+          <Route exact path="/accounts" component={Accounts} />
           <Route path="/accounts/:id" component={
             ({ match }) => {
               const account = this.props.accounts.find(({ _id }) => _id === match.params.id);
