@@ -20,18 +20,25 @@ let TransactionForm = props => {
   const { handleSubmit, pristine, reset, submitting } = props;
   return (
     <form onSubmit={handleSubmit}>
-      <div>
-        <label>Intent</label>
-        <div>
-          <Field name="intent" component="input" type="text" placeholder="Intent" />
+      <div className="form-group">
+        <label htmlFor="transaction-intent">Intent</label>
+        <div id="transaction-intent">
+          <label>
+            <Field component="input" name="intent" type="radio" value="pay" />
+            {' '}
+            Pay
+          </label>
+          <label>
+            <Field component="input" name="intent" type="radio" value="receive" />
+            {' '}
+            Receive
+          </label>
         </div>
       </div>
       <div>
         <FormSection name="ammount">
-          <label>Currency</label>
-          <div>
-            <Field name="currency" component="input" type="text" value="BRL" />
-          </div>
+          <label htmlFor="form-group">Currency</label>
+          <Field id="form-group" className="form-control" name="currency" component="input" type="text" value="BRL" />
           <label>Ammount</label>
           <div>
             <Field name="total" component="input" type="number" value="BRL" />

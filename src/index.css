@@ -1,3 +1,11 @@
 body {
   font-family: sans-serif;
 }
+
+form button:not(:last-child) {
+  margin-right: 10px;
+}
+
+form .form-group:not(:last-child) {
+  margin-bottom: 20px;
+}
