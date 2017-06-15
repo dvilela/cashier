@@ -4,8 +4,13 @@ export const LOAD = 'cashier/accounts/LOAD';
 export const LOAD_SUCCESS = 'cashier/accounts/LOAD_SUCCESS';
 export const LOAD_FAIL = 'cashier/accounts/LOAD_FAIL';
 export const SAVE = 'cashier/accounts/SAVE';
-export const SAVE_SUCESS = 'cashier/accounts/SAVE_SUCCESS';
+export const SAVE_SUCCESS = 'cashier/accounts/SAVE_SUCCESS';
 export const SAVE_FAIL = 'cashier/accounts/SAVE_FAIL';
+export const START_DELETE = 'cashier/accounts/START_DELETE';
+export const END_DELETE = 'cashier/accounts/END_DELETE';
+export const DELETE = 'cashier/accounts/DELETE';
+export const DELETE_SUCCESS = 'cashier/accounts/DELETE_SUCCESS';
+export const DELETE_FAIL = 'cashier/accounts/DELETE_FAIL';
 
 export const fetchData = () => (dispatch) => {
 
@@ -31,7 +36,7 @@ export const save = (account) => (dispatch) => {
   return api.post(account).then(
     () =>
       dispatch({
-        type: SAVE_SUCESS
+        type: SAVE_SUCCESS
       }),
     (error) =>
       dispatch({
@@ -47,7 +52,7 @@ export const saveTransaction = (accountId, transaction) => (dispatch) => {
   return api.postTransaction(accountId, transaction).then(
     () =>
       dispatch({
-        type: SAVE_SUCESS
+        type: SAVE_SUCCESS
       }),
     (error) =>
       dispatch({
@@ -56,3 +61,25 @@ export const saveTransaction = (accountId, transaction) => (dispatch) => {
       })
   );
 };
+
+export const remove = (accountId) => (dispatch) => {
+  dispatch({ type: DELETE });
+  return api.remove(accountId).then(
+    () =>
+      dispatch({
+        type: DELETE_SUCCESS
+      }),
+    (error) =>
+      dispatch({
+        type: DELETE_FAIL,
+        error: error.message
+      })
+  );
+};
+
+export const startAccountDelete = (accountId) => (dispatch) =>
+  dispatch({ type: START_DELETE, accountId });
+
+export const endAccountDelete = (accountId) => (dispatch) =>
+  dispatch({ type: END_DELETE, accountId });
+

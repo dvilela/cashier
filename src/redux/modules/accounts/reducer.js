@@ -1,13 +1,16 @@
 import {
   LOAD,
   LOAD_SUCCESS,
-  LOAD_FAIL
+  LOAD_FAIL,
+  START_DELETE,
+  END_DELETE
 } from './actions';
 
 const initialState = {
   data: [],
   isLoading: false,
-  error: null
+  error: null,
+  deleting: []
 };
 
 const reducer = (state = initialState, action) => {
@@ -27,6 +30,14 @@ const reducer = (state = initialState, action) => {
         isLoading: false,
         error: action.error
       });
+    case START_DELETE:
+      return Object.assign({}, state, {
+        deleting: state.deleting.concat(state.data.filter((account) => account._id === action.accountId))
+      });
+    case END_DELETE:
+      return Object.assign({}, state, {
+        deleting: state.deleting.filter((account) => account._id !== action.accountId)
+      });
     default:
       return state;
   }
@@ -35,3 +46,5 @@ const reducer = (state = initialState, action) => {
 export default reducer;
 
 export const getAccounts = (state) => state.accounts.data;
+
+export const getDeletingAccounts = (state) => state.accounts.deleting;

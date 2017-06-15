@@ -39,6 +39,13 @@ class AccountClient {
       })
       .then(() => {});
   }
+
+  remove(accountId) {
+    return fetch(`http://localhost:8081/api/v1/accounts/${accountId}`, {
+      method: 'DELETE'
+    })
+    .then(() => {});
+  }
 }
 
 export default new AccountClient();
