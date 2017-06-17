@@ -3,14 +3,14 @@ import { connect } from 'react-redux';
 import { Modal } from 'react-bootstrap';
 
 import * as actions from '../../redux/modules/accounts/actions';
-import { getAccounts, getDeletingAccounts } from '../../redux/modules/accounts/reducer';
+import { getAccounts, getDeletingAccounts, getEditing } from '../../redux/modules/accounts/reducer';
 
 import AccountForm from '../AccountForm/AccountForm';
 import AccountList from '../../components/AccountList/AccountList';
 
 class Accounts extends Component {
   render() {
-    const { save, accounts, fetchData, startAccountDelete, endAccountDelete, deleting, remove } = this.props;
+    const { save, update, accounts, fetchData, startAccountDelete, endAccountDelete, deleting, remove, editAccount, editing } = this.props;
 
     const onDeleteHandler = (accountId) => startAccountDelete(accountId);
 
@@ -22,12 +22,23 @@ class Accounts extends Component {
 
     const cancelDeleteHandler = () => endAccountDelete(deletingAccount._id);
 
+    const onEditHandler = (account) => editAccount(account);
+
+    const onSubmitHandler = (account) =>
+      (
+        editing != null ?
+          update(account) :
+          save(account)
+      )
+      .then(fetchData);
+
+
     return (
       <div>
         <h2>New Account</h2>
-        <AccountForm onSubmit={(account) => save(account).then(fetchData)} />
+        <AccountForm onSubmit={onSubmitHandler} />
         <h2>Accounts</h2>
-        <AccountList accounts={accounts} onDelete={onDeleteHandler}  />
+        <AccountList accounts={accounts} onDelete={onDeleteHandler} onEdit={onEditHandler} />
         <Modal show={deletingAccount != null}>
           <Modal.Header>
             <Modal.Title>Remove resource and all its dependents?</Modal.Title>
@@ -46,7 +57,8 @@ class Accounts extends Component {
 Accounts = connect(
   (state) => ({
     accounts: getAccounts(state),
-    deleting: getDeletingAccounts(state)
+    deleting: getDeletingAccounts(state),
+    editing: getEditing(state)
   }),
   actions
 )(Accounts);

@@ -11,6 +11,10 @@ export const END_DELETE = 'cashier/accounts/END_DELETE';
 export const DELETE = 'cashier/accounts/DELETE';
 export const DELETE_SUCCESS = 'cashier/accounts/DELETE_SUCCESS';
 export const DELETE_FAIL = 'cashier/accounts/DELETE_FAIL';
+export const START_EDIT = 'cashier/accounts/START_EDIT';
+export const UPDATE = 'cashier/accounts/UPDATE';
+export const UPDATE_SUCCESS = 'cashier/accounts/UPDATE_SUCCESS';
+export const UPDATE_FAIL = 'cashier/accounts/UPDATE_FAIL';
 
 export const fetchData = () => (dispatch) => {
 
@@ -41,6 +45,22 @@ export const save = (account) => (dispatch) => {
     (error) =>
       dispatch({
         type: SAVE_FAIL,
+        error: error.message
+      })
+  );
+};
+
+export const update = (account) => (dispatch) => {
+  dispatch({ type: UPDATE });
+
+  return api.put(account).then(
+    () =>
+      dispatch({
+        type: UPDATE_SUCCESS
+      }),
+    (error) =>
+      dispatch({
+        type: UPDATE_FAIL,
         error: error.message
       })
   );
@@ -83,3 +103,5 @@ export const startAccountDelete = (accountId) => (dispatch) =>
 export const endAccountDelete = (accountId) => (dispatch) =>
   dispatch({ type: END_DELETE, accountId });
 
+export const editAccount = (account) => (dispatch) =>
+  dispatch({ type: START_EDIT, account });

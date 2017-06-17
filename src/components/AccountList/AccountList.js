@@ -1,6 +1,6 @@
 import React from 'react';
 
-const AccountList = ({ accounts, onDelete }) => (
+const AccountList = ({ accounts, onDelete, onEdit }) => (
   <table className="table table-hover table-condensed">
     <thead>
       <tr>
@@ -17,6 +17,7 @@ const AccountList = ({ accounts, onDelete }) => (
               <td>{account.name}</td>
               <td>{account.description}</td>
               <td>
+                <i className="fa fa-pencil" aria-hidden="true" onClick={() => onEdit(account)} ></i>
                 <i className="fa fa-trash-o" aria-hidden="true" onClick={() => onDelete(account._id)}  ></i>
               </td>
             </tr>

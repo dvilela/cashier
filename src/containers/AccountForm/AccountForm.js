@@ -1,5 +1,8 @@
 import React, { Component } from 'react';
+import { connect } from 'react-redux';
 import { Field, reduxForm } from 'redux-form';
+
+import { getEditing } from '../../redux/modules/accounts/reducer';
 
 import 'react-widgets/dist/css/react-widgets.css';
 import './AccountForm.css';
@@ -29,5 +32,11 @@ class AccountForm extends Component {
 AccountForm = reduxForm({
   form: 'accountForm'
 })(AccountForm);
+
+AccountForm = connect(
+  (state) => ({
+    initialValues: getEditing(state)
+  })
+)(AccountForm);
 
 export default AccountForm;

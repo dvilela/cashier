@@ -28,6 +28,17 @@ class AccountClient {
       .then(() => {});
   }
 
+  put(account) {
+    return fetch(`http://localhost:8081/api/v1/accounts/${account._id}`, {
+      method: 'PUT',
+      headers: {
+        'Accept': 'application/json',
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify(account)
+    });
+  }
+
   postTransaction(accountId, transaction) {
     return fetch(`http://localhost:8081/api/v1/accounts/${accountId}/transactions`, {
         method: 'POST',
