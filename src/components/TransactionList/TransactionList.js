@@ -1,5 +1,6 @@
 import React from 'react';
 import { connect } from 'react-redux';
+import moment from 'moment';
 
 import { getEditing, getDeleting, getAdding } from '../../redux/modules/transactions/reducer';
 import * as actions from '../../redux/modules/transactions/actions';
@@ -57,7 +58,7 @@ let TransactionList = ({ accountId, transactions, editing, editStart, showModal,
                 editing[transaction._id] ?
                   <TransactionForm accountId={accountId} key={transaction._id} initialValues={transaction} /> :
                   <tr key={`transaction-${transaction._id}`} className={'transaction-row ' + (transaction.intent === 'receive' ? 'success' : '')} >
-                    <td>{transaction.date}</td>
+                    <td>{moment(transaction.date).format('MMM DD YYYY')}</td>
                     <td>{transaction.intent}</td>
                     <td>{transaction.description}</td>
                     <td>R$ {transaction.ammount.total.toFixed(2)}</td>

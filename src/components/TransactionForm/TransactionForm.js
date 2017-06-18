@@ -5,22 +5,22 @@ import { fetchData } from '../../redux/modules/accounts/actions';
 import * as modalActions from '../../redux/modules/modal/actions';
 import { connect } from 'react-redux';
 
-/*import DateTimePicker from 'react-widgets/lib/DateTimePicker';
+import DateTimePicker from 'react-widgets/lib/DateTimePicker';
 import moment from 'moment';
-import momentLocaliser from 'react-widgets/lib/localizers/moment';*/
+import momentLocaliser from 'react-widgets/lib/localizers/moment';
 
-//import 'react-widgets/dist/css/react-widgets.css';
+import 'react-widgets/dist/css/react-widgets.css';
 import './TransactionForm.css';
 
-//momentLocaliser(moment);
+momentLocaliser(moment);
 
-/*const renderDateTimePicker = ({ input: { onChange, value }, showTime }) =>
+const renderDateTimePicker = ({ input: { onChange, value }, showTime }) =>
   <DateTimePicker
     onChange={onChange}
     format="DD-MMM-YYYY"
     time={showTime}
     value={!value ? null : new Date(value)}
-  />*/
+  />
 
 let TransactionForm = props => {
   const { accountId, handleSubmit, pristine, submitting, editStop, save, saveStop, update, initialValues, fetchData } = props;
@@ -35,8 +35,8 @@ let TransactionForm = props => {
   return (
     <tr className="form-transaction">
       <td className="form-group form-group-sm">
-        {/*<Field className="form-control" name="date" showTime={false} component={renderDateTimePicker} type="text" />*/}
-        <Field className="form-control" name="date" component="input" type="text" />
+        <Field className="form-control" name="date" showTime={false} component={renderDateTimePicker} type="text" />
+        {/*<Field className="form-control" name="date" component="input" type="text" />*/}
       </td>
       <td className="form-group form-group-sm radio">
         <label>
