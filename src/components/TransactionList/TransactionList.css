@@ -1,0 +1,16 @@
+.transaction-table>thead>tr>.col-date {
+    min-width: 265px;
+}
+.transaction-table>thead>tr>.col-intent {
+    min-width: 149px;
+}
+.transaction-table>thead>tr>.col-description,
+.transaction-table>thead>tr>.col-value {
+    min-width: 234px;
+}
+.transaction-table>thead>tr>.col-actions {
+    min-width: 208px;
+}
+.transaction-table>tbody>.transaction-row>td:not(:last-child) {
+    padding: 12px 5px 0px;
+}

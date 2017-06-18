@@ -1,0 +1,11 @@
+.form-transaction > .radio {
+    margin-top: 0px;
+    margin-bottom: 0px;
+    padding-top: 10px
+}
+.form-transaction > .radio > label:not(:last-child) {
+    margin-right: 10px;
+}
+.form-transaction:first-child > .radio {
+    border: 0;
+}

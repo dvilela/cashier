@@ -1,4 +1,41 @@
+class TransactionClient {
+  post(accountId, transaction) {
+    return fetch(`http://localhost:8081/api/v1/accounts/${accountId}/transactions`, {
+        method: 'POST',
+        headers: {
+          'Accept': 'application/json',
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify(transaction)
+      })
+      .then(() => {});
+  }
+
+  put(accountId, transaction) {
+    return fetch(`http://localhost:8081/api/v1/accounts/${accountId}/transactions/${transaction._id}`, {
+        method: 'PUT',
+        headers: {
+          'Accept': 'application/json',
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify(transaction)
+      })
+      .then(() => {});
+  }
+
+  delete(accountId, transactionId) {
+    return fetch(`http://localhost:8081/api/v1/accounts/${accountId}/transactions/${transactionId}`, {
+      method: 'DELETE'
+    })
+    .then(() => {});
+  }
+}
+
 class AccountClient {
+  constructor() {
+    this.transactions = new TransactionClient();
+  }
+
   fetchData() {
     return fetch('http://localhost:8081/api/v1/accounts')
       .then(
@@ -37,18 +74,6 @@ class AccountClient {
       },
       body: JSON.stringify(account)
     });
-  }
-
-  postTransaction(accountId, transaction) {
-    return fetch(`http://localhost:8081/api/v1/accounts/${accountId}/transactions`, {
-        method: 'POST',
-        headers: {
-          'Accept': 'application/json',
-          'Content-Type': 'application/json'
-        },
-        body: JSON.stringify(transaction)
-      })
-      .then(() => {});
   }
 
   remove(accountId) {

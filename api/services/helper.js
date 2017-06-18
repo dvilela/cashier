@@ -20,14 +20,12 @@ const crud = (model, middlewares = []) => {
         response = applyMiddlewares(response.toObject());
         logger.debug('doc created', response);
         return response;
-      },
-      (err) => logger.error(err)
+      }
     );
 
   const deleteById = (id) =>
     model.remove({ _id: id }).then(
-      () => { },
-      (err) => logger.error(err)
+      () => { }
     );
 
   const find = ({ fields, sort, offset, limit, query }) => {
@@ -35,16 +33,14 @@ const crud = (model, middlewares = []) => {
     const countPromise = model.count();
 
     return Promise.all([queryPromise, countPromise]).then(
-      ([docs, count]) => ({ totalCount: count, content: applyMiddlewares(docs) }),
-      (err) => logger.error(err)
+      ([docs, count]) => ({ totalCount: count, content: applyMiddlewares(docs) })
     )
   };
 
   const findById = (id, { fields } = {}) =>
     model.findById(id).select(fields).then(
       (response) =>
-        response && applyMiddlewares(response.toObject()),
-      (err) => logger.error(err)
+        response && applyMiddlewares(response.toObject())
     );
 
   const pull = (id, path, value) =>
@@ -61,8 +57,7 @@ const crud = (model, middlewares = []) => {
           doc.increment();
           doc.save();
         }
-      },
-      (err) => logger.error(err)
+      }
     );
 
   return {

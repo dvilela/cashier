@@ -6,9 +6,12 @@ import { LinkContainer } from 'react-router-bootstrap';
 
 import * as actions from '../../redux/modules/accounts/actions';
 import { getAccounts } from '../../redux/modules/accounts/reducer';
+import { getModal } from '../../redux/modules/modal/reducer';
 
 import Account from '../Account/Account';
 import Accounts from '../Accounts/Accounts';
+
+import { Modal } from 'react-bootstrap';
 
 import './App.css';
 
@@ -21,7 +24,7 @@ class App extends Component {
     fetchData();
   }
   render() {
-    const { accounts } = this.props;
+    const { accounts, modal } = this.props;
     return (
       <div className="App">
         <Navbar inverse collapseOnSelect>
@@ -69,6 +72,12 @@ class App extends Component {
             }
           } />
         </div>
+
+        <Modal show={modal.show}>
+          <Modal.Header><Modal.Title>{modal.title}</Modal.Title></Modal.Header>
+          <Modal.Body>{modal.body}</Modal.Body>
+          <Modal.Footer>{modal.footer}</Modal.Footer>
+        </Modal>
       </div>
     );
   }
@@ -76,7 +85,8 @@ class App extends Component {
 
 App = connect(
   (state) => ({
-    accounts: getAccounts(state)
+    accounts: getAccounts(state),
+    modal: getModal(state)
   }),
   actions
 )(App);
