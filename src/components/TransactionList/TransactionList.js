@@ -2,7 +2,7 @@ import React from 'react';
 
 export default ({ transactions }) =>
   (
-    transactions && transactions.length ?
+    transactions &&
       <table className="table table-hover table-condensed">
         <thead>
           <tr>
@@ -13,7 +13,7 @@ export default ({ transactions }) =>
           </tr>
         </thead>
         <tbody>
-          {
+          { transactions.length > 0 ?
             transactions.map(
               (transaction) =>
                 <tr key={`transaction-${transaction._id}`} className={transaction.intent === 'receive' ? 'success' : ''} >
@@ -23,8 +23,8 @@ export default ({ transactions }) =>
                   <td>R$ {transaction.ammount.total.toFixed(2)}</td>
                 </tr>
             )
+            : <tr><td colSpan="4">No data</td></tr>
           }
         </tbody>
       </table>
-    : <p>No data</p>
   );
