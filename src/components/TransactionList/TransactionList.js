@@ -45,6 +45,7 @@ let TransactionList = ({ accountId, transactions, editing, editStart, showModal,
           <tr>
             <th className="col-date">Date</th>
             <th className="col-intent">Intent</th>
+            <th className="col-category">Category</th>
             <th className="col-description">Description</th>
             <th className="col-value">Value</th>
             <th className="col-actions">Actions</th>
@@ -60,6 +61,7 @@ let TransactionList = ({ accountId, transactions, editing, editStart, showModal,
                   <tr key={`transaction-${transaction._id}`} className={'transaction-row ' + (transaction.intent === 'receive' ? 'success' : '')} >
                     <td>{moment(transaction.date).format('MMM DD YYYY')}</td>
                     <td>{transaction.intent}</td>
+                    <td>{transaction.category != null ? transaction.category : '-'}</td>
                     <td>{transaction.description}</td>
                     <td>R$ {transaction.ammount.total.toFixed(2)}</td>
                     <td>

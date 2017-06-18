@@ -131,9 +131,9 @@ module.exports = ({ config }) => {
               .then(({ content: transactions }) => {
                 if (transactions != null && transactions.length) {
                   if (req.query.interval != null) {
-                    res.send(transactionService.balance(transactions, { interval: req.query.interval }));
+                    res.send(transactionService.balance(transactions, { interval: req.query.interval, groupbycategory: true }));
                   } else {
-                    res.send(transactionService.balance(transactions));
+                    res.send(transactionService.balance(transactions, { groupbycategory: true }));
                   }
                 } else {
                   res.sendStatus(204);

@@ -21,3 +21,28 @@
     text-align: center;
     font-weight: bold
 }
+
+.table-balance .tr-sum {
+    font-weight: bold
+}
+
+.table-balance .td-pos,
+.table-balance .td-neg {
+    text-align: end
+}
+
+.table-balance .td-pos {
+    color: #419641;
+}
+
+.table-balance .td-neg {
+    color: #ac2925;
+}
+
+.table-balance .td-hifen {
+    text-align: center;
+}
+
+.table-balance .th-month {
+    text-align: center;
+}

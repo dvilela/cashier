@@ -77,4 +77,18 @@ describe('groupby helper', () => {
       groupby.month(objects, (obj) => obj.date)
     ).toEqual(expected);
   });
+
+  it('should group object by property', () => {
+    const objects = [
+      { id: 1991111, category: 'category1' },
+      { id: 199451, category: 'category2' }
+    ];
+    const expected = {
+      'category1': [ { id: 1991111, category: 'category1' } ],
+      'category2': [ { id: 199451, category: 'category2' } ]
+    };
+    expect(
+      groupby(objects, (obj) => obj.category)
+    ).toEqual(expected)
+  });
 });
