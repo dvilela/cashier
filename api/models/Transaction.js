@@ -22,6 +22,7 @@ const schema = {
     enum: ['pay', 'receive'],
     required: true
   },
+  category: String,
   payer: {
     id: Schema.ObjectId,
     name: String

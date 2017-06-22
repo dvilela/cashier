@@ -20,7 +20,22 @@ const resolveScheduling = (transaction) => {
 // const service = crud(Transaction, [resolveScheduling]);
 const service = crud(Transaction);
 
-const balance = (transactions, { interval = 'month' } = {}) => {
+const categoryBalance = (transactions) => {
+  const groups = groupByCategory(transactions);
+  let group;
+  for (group in groups) {
+    groups[group] = groups[group].reduce(
+      (balance, transaction) =>
+        transaction.intent == 'pay' ?
+            balance - transaction.ammount.total :
+            balance + transaction.ammount.total
+      , 0
+    )
+  }
+  return groups;
+};
+
+const balance = (transactions, { interval = 'month', groupbycategory = false } = {}) => {
   const groups = groupByTime(transactions, { interval });
   let lastMonthBalance = 0, group;
   for (group in groups) {
@@ -32,7 +47,14 @@ const balance = (transactions, { interval = 'month' } = {}) => {
       ,
       lastMonthBalance
     );
-    groups[group] = lastMonthBalance;
+    if (groupbycategory) {
+      groups[group] = {
+        categories: categoryBalance(groups[group]),
+        balance: lastMonthBalance
+      };
+    } else {
+      groups[group] = lastMonthBalance;
+    }
   }
   return groups;
 }
@@ -44,9 +66,14 @@ const groupByTime = (transactions, { interval = 'month '} = {}) => {
   return sortObject(groupby[interval](transactions, (transaction) => transaction.date));
 };
 
+const groupByCategory = (transactions) => {
+  return groupby(transactions, (transaction) => transaction.category);
+}
+
 // for testing pourposes
 service.balance = balance;
 service.groupByTime = groupByTime;
+service.groupByCategory = groupByCategory;
 // service.resolveScheduling = resolveScheduling;
 
 module.exports = service;

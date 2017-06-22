@@ -6,8 +6,8 @@ const month = (data, datee) => {
     datee = (value) => value;
   }
   return groupBy(data, (value) => moment(datee(value)).utc().startOf('month').format('YYYY-MM'));
-}
-
-module.exports = {
-  month
 };
+
+module.exports = (data, datee = (value) => value) => groupBy(data, datee);
+
+module.exports.month = month;
