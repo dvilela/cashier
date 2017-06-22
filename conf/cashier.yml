@@ -1,7 +1,7 @@
 api:
   host: api.cashier.com
   port: 8081
-  publicUrl: http://api.cashier.com/v1 # used at hrel of links
+  publicUrl: https://secure-island-37034.herokuapp.com/api/v1 # used at hrel of links
 
 mongodb:
-  uri: mongodb://172.17.0.2/cashier
+  uri: mongodb://cashier:Cashier123@ds033143.mlab.com:33143/sense
