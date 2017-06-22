@@ -10,8 +10,8 @@ const routers = require('./routers');
 const expressJWT = require('express-jwt');
 const jwt = require('jsonwebtoken');
 
-if (process.env.port != null) {
-  config.api.port = process.env.port;
+if (process.env.PORT != null) {
+  config.api.port = process.env.PORT;
 }
 
 Object.assign(config, require('./helpers/api-details')(config.api));
