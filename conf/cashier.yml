@@ -1,6 +1,6 @@
 api:
   host: api.cashier.com
-  port: 8081
+  port: 80
   publicUrl: https://secure-island-37034.herokuapp.com/api/v1 # used at hrel of links
 
 mongodb:
