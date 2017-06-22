@@ -7,7 +7,6 @@ coverage/
 # production
 build/
 data/
-API_SECRET
 
 # misc
 .DS_Store
