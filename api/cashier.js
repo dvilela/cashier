@@ -59,6 +59,7 @@ if (SECRET != null) {
         res.status(404).send('User not found');
         return;
       }
+
       user.comparePassword(req.body.password, (err, isMatch) => {
         if (err) throw err;
         if (!isMatch) {
