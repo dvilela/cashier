@@ -51,6 +51,9 @@ let TransactionForm = props => {
         </label>
       </td>
       <td className="form-group form-group-sm">
+        <Field className="form-control" name="category" component="input" type="text" />
+      </td>
+      <td className="form-group form-group-sm">
         <Field className="form-control" name="description" component="input" type="text" />
       </td>
       <td className="form-group form-group-sm">
