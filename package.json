@@ -32,10 +32,13 @@
   },
   "homepage": "https://github.com/baruinho/cashier#readme",
   "dependencies": {
+    "bcrypt": "^1.0.2",
     "body-parser": "^1.16.1",
     "bootstrap": "^3.3.7",
     "dotenv": "^4.0.0",
     "express": "^4.14.1",
+    "express-jwt": "^5.3.0",
+    "jsonwebtoken": "^7.4.1",
     "lodash": "^4.17.4",
     "moment": "^2.18.1",
     "mongoose": "^4.8.3",
