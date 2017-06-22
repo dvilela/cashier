@@ -55,6 +55,10 @@ if (SECRET != null) {
   app.post('/login', validateUser);
   app.post('/login', (req, res) => {
     User.findOne({ username: req.body.username }, (err, user) => {
+      if (user == null) {
+        res.status(404).send('User not found');
+        return;
+      }
       user.comparePassword(req.body.password, (err, isMatch) => {
         if (err) throw err;
         if (!isMatch) {
