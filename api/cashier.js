@@ -11,7 +11,7 @@ const expressJWT = require('express-jwt');
 const jwt = require('jsonwebtoken');
 
 if (process.env.port != null) {
-  config.api = process.env.port;
+  config.api.port = process.env.port;
 }
 
 Object.assign(config, require('./helpers/api-details')(config.api));
@@ -20,7 +20,7 @@ logger.debug('Starting cashier', { config, env });
 
 const app = express();
 
-app.set('port', );
+app.set('port', config.api.port);
 
 // enable CORS
 app.use(function (req, res, next) {
