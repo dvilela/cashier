@@ -4,8 +4,8 @@
   "description": "It resumes your accounts balance at a given time.",
   "main": "api/cashier.js",
   "scripts": {
-    "start-api": "node setup.js && ./bin/api.js",
-    "start": "react-scripts start",
+    "start": "node setup.js && ./bin/api.js",
+    "start-dev": "react-scripts start",
     "build": "react-scripts build",
     "test": "react-scripts test --env=jsdom",
     "eject": "react-scripts eject"
